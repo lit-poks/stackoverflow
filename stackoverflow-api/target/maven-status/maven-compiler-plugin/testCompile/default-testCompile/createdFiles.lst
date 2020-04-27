@@ -1,0 +1,5 @@
+controller\AnswerControllerTest.class
+controller\CommonControllerTest.class
+controller\AdminControllerTest.class
+controller\UserControllerTest.class
+controller\QuestionControllerTest.class
