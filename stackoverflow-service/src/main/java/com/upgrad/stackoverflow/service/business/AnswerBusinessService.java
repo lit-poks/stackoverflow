@@ -35,16 +35,14 @@ public class AnswerBusinessService {
 
         UserAuthEntity userAuthEntity = userDao.getUserAuthByAccesstoken(authorization);
 
-        //
-        return null;
+
     }
 
     public QuestionEntity getQuestionByUuid(String Uuid) throws InvalidQuestionException {
 
         QuestionEntity questionEntity = answerDao.getQuestionByUuid(Uuid);
 
-        //
-        return null;
+
     }
 
 
@@ -55,8 +53,7 @@ public class AnswerBusinessService {
     public AnswerEntity editAnswerContent(AnswerEntity answerEntity, String answerId, String authorization) throws AuthorizationFailedException, AnswerNotFoundException {
         UserAuthEntity userAuthEntity = userDao.getUserAuthByAccesstoken(authorization);
 
-        //
-        return null;
+
     }
 
     /**
@@ -66,8 +63,7 @@ public class AnswerBusinessService {
     public AnswerEntity deleteAnswer(String answerId, String authorization) throws AuthorizationFailedException, AnswerNotFoundException {
         UserAuthEntity userAuthEntity = userDao.getUserAuthByAccesstoken(authorization);
 
-        //
-        return null;
+
     }
 
     /**
@@ -76,7 +72,6 @@ public class AnswerBusinessService {
     public TypedQuery<AnswerEntity> getAnswersByQuestion(String questionId, String authorization) throws AuthorizationFailedException, InvalidQuestionException {
         UserAuthEntity userAuthEntity = userDao.getUserAuthByAccesstoken(authorization);
 
-        //
-        return null;
+
     }
 }

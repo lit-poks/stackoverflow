@@ -26,7 +26,6 @@ public class CommonBusinessService {
 
         UserAuthEntity userAuthEntity = userDao.getUserAuthByAccesstoken(authorization);
 
-        //
-        return null;
+
     }
 }

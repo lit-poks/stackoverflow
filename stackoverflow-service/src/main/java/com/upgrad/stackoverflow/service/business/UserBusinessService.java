@@ -33,8 +33,7 @@ public class UserBusinessService {
         userEntity.setSalt(encryptedText[0]);
         userEntity.setPassword(encryptedText[1]);
 
-        //
-        return null;
+
     }
 
     /**
@@ -45,8 +44,7 @@ public class UserBusinessService {
 
         UserEntity userEntity = userDao.getUserByUsername(username);
 
-        //
-        return null;
+
     }
 
     /**
@@ -57,7 +55,6 @@ public class UserBusinessService {
 
         UserAuthEntity userAuthEntity = userDao.getUserAuthByAccesstoken(authorization);
 
-        //
-        return null;
+
     }
 }

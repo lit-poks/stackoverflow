@@ -27,7 +27,6 @@ public class AdminBusinessService {
     public UserEntity deleteUser(String authorization, String uuid) throws AuthorizationFailedException, UserNotFoundException {
         UserAuthEntity userAuthEntity = userDao.getUserAuthByAccesstoken(authorization);
 
-        //
-        return null;
+
     }
 }
