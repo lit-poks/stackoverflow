@@ -8,6 +8,7 @@ import com.upgrad.stackoverflow.service.exception.AuthenticationFailedException;
 import com.upgrad.stackoverflow.service.exception.SignOutRestrictedException;
 import com.upgrad.stackoverflow.service.exception.SignUpRestrictedException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -84,8 +85,14 @@ public class UserBusinessService {
     @Transactional(propagation = Propagation.REQUIRED)
     public UserAuthEntity signout(String authorization) throws SignOutRestrictedException {
 
-        UserAuthEntity userAuthEntity = userDao.getUserAuthByAccesstoken(authorization);
+        final UserAuthEntity userAuthEntity = userDao.getUserAuthByAccesstoken(authorization);
+        if(userAuthEntity==null){
+            throw new SignOutRestrictedException("SGR-001","User is not Signed in");
+        }
 
+        userAuthEntity.setLogoutAt(ZonedDateTime.now());
 
+        final UserAuthEntity updatedUserAuth=userDao.updateUserAuth(userAuthEntity);
+        return updatedUserAuth;
     }
 }

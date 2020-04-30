@@ -74,7 +74,7 @@ public class UserController {
         HttpHeaders httpHeaders=new HttpHeaders();
         httpHeaders.add("access-token",userAuthEntity.getAccessToken());
 
-        return new ResponseEntity<>(signinResponse,httpHeaders,HttpStatus.OK);
+        return new ResponseEntity<SigninResponse>(signinResponse,httpHeaders,HttpStatus.OK);
     }
 
     /**
@@ -84,5 +84,13 @@ public class UserController {
      * @return - ResponseEntity<SignoutResponse> type object along with Http status OK.
      * @throws SignOutRestrictedException
      */
+    @RequestMapping(method = RequestMethod.POST,path = "/user/signout",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<SignoutResponse> signout(@RequestHeader("authorisation") String authorization) throws SignOutRestrictedException{
+    byte[] decode=Base64.getDecoder().decode(authorization.split("Bearer")[1]);
+    String decodedToken=new String(decode);
+    UserAuthEntity userAuthEntity=userBusinessService.signout(decodedToken);
+    SignoutResponse signoutResponse=new SignoutResponse().id(userAuthEntity.getUuid()).message("SIGNED OUT SUCCESSFULLY");
 
+    return new ResponseEntity<SignoutResponse>(signoutResponse,HttpStatus.OK);
+    }
 }

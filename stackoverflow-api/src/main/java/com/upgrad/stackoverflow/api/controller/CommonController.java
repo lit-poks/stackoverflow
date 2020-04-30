@@ -11,6 +11,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Base64;
+
 @RequestMapping("/")
 public class CommonController {
 
@@ -26,5 +28,23 @@ public class CommonController {
      * @throws UserNotFoundException
      * @throws AuthorizationFailedException
      */
+    @RequestMapping(method = RequestMethod.GET,path = "userprofile/{userId}",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<UserDetailsResponse> getUserDetails(@PathVariable("userId") final String userId,@RequestHeader("authorisation") String authorization) throws  UserNotFoundException,AuthorizationFailedException{
+        byte[] decode= Base64.getDecoder().decode(authorization.split("Bearer")[1]);
+        String decodedAuthorization=new String(decode);
+
+        UserEntity userEntity=commonBusinessService.getUser(userId,decodedAuthorization);
+        final UserDetailsResponse userDetailsResponse=new UserDetailsResponse();
+        userDetailsResponse.setFirstName(userEntity.getFirstName());
+        userDetailsResponse.setLastName(userEntity.getLastName());
+        userDetailsResponse.setUserName(userEntity.getUserName());
+        userDetailsResponse.setEmailAddress(userEntity.getEmail());
+        userDetailsResponse.setCountry(userEntity.getCountry());
+        userDetailsResponse.setAboutMe(userEntity.getAboutMe());
+        userDetailsResponse.setDob(userEntity.getDob());
+        userDetailsResponse.setContactNumber(userEntity.getContactNumber());
+
+        return new ResponseEntity<UserDetailsResponse>(userDetailsResponse,HttpStatus.OK);
+    }
 
 }
