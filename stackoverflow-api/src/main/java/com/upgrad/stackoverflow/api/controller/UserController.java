@@ -36,6 +36,25 @@ public class UserController {
      * @throws SignUpRestrictedException
      */
 
+    @RequestMapping(method = RequestMethod.POST,path = "/user/signup",consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<SignupUserResponse> signup(final SignupUserRequest signupUserRequest) throws SignUpRestrictedException{
+
+        final UserEntity userEntity=new UserEntity();
+        userEntity.setFirstName(signupUserRequest.getFirstName());
+        userEntity.setLastName(signupUserRequest.getLastName());
+        userEntity.setUserName(signupUserRequest.getUserName());
+        userEntity.setEmail(signupUserRequest.getEmailAddress());
+        userEntity.setPassword(signupUserRequest.getPassword());
+        userEntity.setCountry(signupUserRequest.getCountry());
+        userEntity.setAboutMe(signupUserRequest.getAboutMe());
+        userEntity.setDob(signupUserRequest.getDob());
+        userEntity.setContactNumber(signupUserRequest.getContactNumber());
+
+        final UserEntity createdUserEntity=userBusinessService.signup(userEntity);
+        final SignupUserResponse userResponse=new SignupUserResponse().id(createdUserEntity.getUuid()).status("USER SUCCESSFULLY REGISTERED");
+        return new ResponseEntity<SignupUserResponse>(userResponse,HttpStatus.CREATED);
+    }
+
     /**
      * A controller method for user authentication.
      *
@@ -43,6 +62,20 @@ public class UserController {
      * @return - ResponseEntity<SigninResponse> type object along with Http status OK.
      * @throws AuthenticationFailedException
      */
+    @RequestMapping(method = RequestMethod.POST,path = "/user/signin",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<SigninResponse> signin(@RequestHeader("authorisation") String authorization) throws AuthenticationFailedException{
+
+        byte[] decode=Base64.getDecoder().decode(authorization.split("Basic")[1]);
+        String decoded=new String(decode);
+        String userCredentials[]=decoded.split(":");
+        final UserAuthEntity userAuthEntity=userBusinessService.authenticate(userCredentials[0],userCredentials[1]);
+        final SigninResponse signinResponse=new SigninResponse().id(userAuthEntity.getUuid()).message("SIGNED IN SUCCESSFULLY");
+
+        HttpHeaders httpHeaders=new HttpHeaders();
+        httpHeaders.add("access-token",userAuthEntity.getAccessToken());
+
+        return new ResponseEntity<>(signinResponse,httpHeaders,HttpStatus.OK);
+    }
 
     /**
      * A controller method for user signout.
