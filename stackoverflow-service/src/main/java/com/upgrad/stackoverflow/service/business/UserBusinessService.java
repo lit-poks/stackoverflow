@@ -60,7 +60,7 @@ public class UserBusinessService {
         if(userEntity.getPassword().equals(encryptedPassword)){
             JwtTokenProvider jwtTokenProvider=new JwtTokenProvider(encryptedPassword);
             UserAuthEntity userAuthEntity=new UserAuthEntity();
-            userAuthEntity.setUuid(userEntity.getUuid());
+            userAuthEntity.setUuid(UUID.randomUUID().toString());
             userAuthEntity.setUser(userEntity);
             ZonedDateTime now=ZonedDateTime.now();
             ZonedDateTime expiresAt=now.plusHours(8);
