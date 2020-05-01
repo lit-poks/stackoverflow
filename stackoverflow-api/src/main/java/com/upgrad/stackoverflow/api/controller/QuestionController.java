@@ -12,8 +12,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.TypedQuery;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,6 +33,20 @@ public class QuestionController {
      * @return - ResponseEntity<QuestionResponse> type object along with Http status CREATED.
      * @throws AuthorizationFailedException
      */
+    @RequestMapping(method = RequestMethod.POST,path = "/question/create",consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<QuestionResponse> createQuestion(QuestionRequest questionRequest,@RequestHeader("authorization") String authorization) throws AuthorizationFailedException{
+        byte[] decode= Base64.getDecoder().decode(authorization.split("Bearer")[1]);
+        String decodedAuth=new String(decode);
+
+        final QuestionEntity questionEntity=new QuestionEntity();
+        questionEntity.setUuid(UUID.randomUUID().toString());
+        questionEntity.setContent(questionRequest.getContent());
+        questionEntity.setDate(ZonedDateTime.now());
+        final QuestionEntity createdQuestionEntity=questionBusinessService.createQuestion(questionEntity,decodedAuth);
+        final QuestionResponse questionResponse=new QuestionResponse().id(createdQuestionEntity.getUuid()).status("QUESTION CREATED");
+
+        return new ResponseEntity<QuestionResponse>(questionResponse,HttpStatus.CREATED);
+    }
 
     /**
      * A controller method to fetch all the questions from the database.
@@ -39,6 +55,20 @@ public class QuestionController {
      * @return - ResponseEntity<List<QuestionDetailsResponse>> type object along with Http status OK.
      * @throws AuthorizationFailedException
      */
+    @RequestMapping(method = RequestMethod.GET,path = "/question/all",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<List<QuestionDetailsResponse>> getAllQuestions(@RequestHeader("authorization") String authorization) throws AuthorizationFailedException{
+        byte[] decode= Base64.getDecoder().decode(authorization.split("Bearer")[1]);
+        final String decodedAuthorization=new String(decode);
+        final TypedQuery<QuestionEntity> allQuestions=questionBusinessService.getQuestions(decodedAuthorization);
+        final List<QuestionEntity> listOfQuestions=allQuestions.getResultList();
+        final List<QuestionDetailsResponse> questionResponseList=new ArrayList<QuestionDetailsResponse>();
+
+        for(QuestionEntity e:listOfQuestions){
+            questionResponseList.add(new QuestionDetailsResponse().id(e.getUuid()).content(e.getContent()));
+        }
+
+        return new ResponseEntity<List<QuestionDetailsResponse>>(questionResponseList,HttpStatus.OK);
+    }
 
     /**
      * A controller method to edit the question in the database.
@@ -50,7 +80,17 @@ public class QuestionController {
      * @throws AuthorizationFailedException
      * @throws InvalidQuestionException
      */
-
+    @RequestMapping(method = RequestMethod.PUT,path = "/question/edit/{questionId}",consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<QuestionEditResponse> editQuestionContent(QuestionEditRequest questionEditRequest,@PathVariable("questionId") String questionId,@RequestHeader("authorization")String authorization)
+    throws  AuthorizationFailedException,InvalidQuestionException{
+        byte[] decode= Base64.getDecoder().decode(authorization.split("Bearer")[1]);
+        final String decodedAuthorization=new String(decode);
+            QuestionEntity questionEntity=new QuestionEntity();
+            questionEntity.setContent(questionEditRequest.getContent());
+            final QuestionEntity editedQuestionEntity=questionBusinessService.editQuestionContent(questionEntity,questionId,decodedAuthorization);
+            QuestionEditResponse questionEditResponse=new QuestionEditResponse().id(editedQuestionEntity.getUuid()).status("QUESTION EDITED");
+            return new ResponseEntity<QuestionEditResponse>(questionEditResponse,HttpStatus.OK);
+    }
     /**
      * A controller method to delete the question in the database.
      *
@@ -60,6 +100,15 @@ public class QuestionController {
      * @throws AuthorizationFailedException
      * @throws InvalidQuestionException
      */
+    @RequestMapping(method = RequestMethod.DELETE,path = "/question/delete/{questionId}",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<QuestionDeleteResponse> deleteQuestion(@RequestHeader("authorization") String authorization,@PathVariable("questionId")String questionId)
+    throws AuthorizationFailedException,InvalidQuestionException{
+        byte[] decode= Base64.getDecoder().decode(authorization.split("Bearer")[1]);
+        final String decodedAuthorization=new String(decode);
+        QuestionEntity deletedQuestionEntity=questionBusinessService.deleteQuestion(questionId,decodedAuthorization);
+        QuestionDeleteResponse questionDeleteResponse=new QuestionDeleteResponse().id(deletedQuestionEntity.getUuid()).status("QUESTION DELETED");
+        return new ResponseEntity<QuestionDeleteResponse>(questionDeleteResponse,HttpStatus.OK);
+    }
 
     /**
      * A controller method to fetch all the questions posted by a specific user.
@@ -70,4 +119,19 @@ public class QuestionController {
      * @throws AuthorizationFailedException
      * @throws UserNotFoundException
      */
+    @RequestMapping(method = RequestMethod.GET,path = "question/all/{userId}",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<List<QuestionDetailsResponse>> getAllQuestionsByUser(@PathVariable("userId")String userId,@RequestHeader("authorization")String authorization)
+    throws AuthorizationFailedException,UserNotFoundException{
+        byte[] decode= Base64.getDecoder().decode(authorization.split("Bearer")[1]);
+        final String decodedAuthorization=new String(decode);
+        TypedQuery<QuestionEntity> responseQuery=questionBusinessService.getQuestionsByUser(userId,decodedAuthorization);
+        List<QuestionEntity> questionEntityList=responseQuery.getResultList();
+        List<QuestionDetailsResponse> responses=new ArrayList<QuestionDetailsResponse>();
+
+        for(QuestionEntity e:questionEntityList){
+            responses.add(new QuestionDetailsResponse().id(e.getUuid()).content(e.getContent()));
+        }
+        return new ResponseEntity<List<QuestionDetailsResponse>>(responses,HttpStatus.OK);
+    }
+
 }
