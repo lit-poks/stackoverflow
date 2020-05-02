@@ -24,8 +24,27 @@ public class AdminBusinessService {
      * The method implements the business logic for userDelete endpoint.
      */
     @Transactional(propagation = Propagation.REQUIRED)
-    public UserEntity deleteUser(String authorization, String uuid) throws AuthorizationFailedException, UserNotFoundException {
+    public UserEntity deleteUser(final String authorization,final String uuid) throws AuthorizationFailedException, UserNotFoundException {
         UserAuthEntity userAuthEntity = userDao.getUserAuthByAccesstoken(authorization);
+        if(userAuthEntity==null){
+            throw new AuthorizationFailedException("ATHR-001","User has not signed in");
+        }
+
+        if(userAuthEntity.getLogoutAt()!=null){
+            throw new AuthorizationFailedException("ATHR-002","User is signed out");
+        }
+        String role=userAuthEntity.getUser().getRole();
+
+        if(role.equals("nonadmin")){
+            throw new AuthorizationFailedException("ATHR-003","Unauthorized Access, Entered user is not an admin");
+        }
+        UserEntity userEntity=adminDao.getUserByUuid(uuid);
+        if(userEntity==null){
+            throw new UserNotFoundException("USR-001","User with entered uuid to be deleted does not exist");
+        }
+
+        final UserEntity deletedUser=adminDao.deleteUser(userEntity);
+        return deletedUser;
 
 
     }

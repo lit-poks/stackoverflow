@@ -1,9 +1,19 @@
 package com.upgrad.stackoverflow.api.controller;
 
+import com.upgrad.stackoverflow.api.model.UserDeleteResponse;
 import com.upgrad.stackoverflow.service.business.AdminBusinessService;
+import com.upgrad.stackoverflow.service.entity.UserEntity;
+import com.upgrad.stackoverflow.service.exception.AuthorizationFailedException;
+import com.upgrad.stackoverflow.service.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Base64;
+
+@RestController
 @RequestMapping("/admin")
 public class AdminController {
 
@@ -19,5 +29,16 @@ public class AdminController {
      * @throws AuthorizationFailedException
      * @throws UserNotFoundException
      */
+    @RequestMapping(method = RequestMethod.DELETE,path = "/admin/user/{userId}",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<UserDeleteResponse> userDelete(@PathVariable("userId")String userId, @RequestHeader("authorization")String authorization)
+    throws AuthorizationFailedException, UserNotFoundException {
+//        byte[] decode= Base64.getDecoder().decode(authorization.split("Bearer ")[1]);
+//        String decodedAuthorization=new String(decode);
+
+        UserEntity userEntity=adminBusinessService.deleteUser(authorization,userId);
+        UserDeleteResponse userDeleteResponse=new UserDeleteResponse().id(userEntity.getUuid()).status("USER SUCCESSFULLY DELETED");
+        return new ResponseEntity<UserDeleteResponse>(userDeleteResponse, HttpStatus.OK);
+    }
+
 
 }
