@@ -79,18 +79,19 @@ public class QuestionBusinessService {
         if(userAuthEntity.getLogoutAt()!=null){
             throw new AuthorizationFailedException("ATHR-002","User is signed out.Sign in first to edit the question");
         }
-        QuestionEntity oldQuestionEntity=questionDao.getQuestionByUuid(questionId);
 
+        QuestionEntity oldQuestionEntity=questionDao.getQuestionByUuid(questionId);
         if(oldQuestionEntity==null){
             throw new InvalidQuestionException("QUES-001","Entered question uuid does not exist");
         }
 
-        if(userAuthEntity.getUser().getUuid()!=oldQuestionEntity.getUser().getUuid()){
+        if(!userAuthEntity.getUser().getUuid().equals(oldQuestionEntity.getUser().getUuid())){
             throw new AuthorizationFailedException("ATHR-003","Only the question owner can edit the question");
         }
 
 
         oldQuestionEntity.setContent(questionEntity.getContent());
+        oldQuestionEntity.setDate(ZonedDateTime.now());
         QuestionEntity updatedQuestionEnitiy=questionDao.editQuestion(oldQuestionEntity);
         return updatedQuestionEnitiy;
 
@@ -114,7 +115,7 @@ public class QuestionBusinessService {
             throw new InvalidQuestionException("QUES-001","Entered question uuid does not exist");
         }
 
-        if(userAuthEntity.getUser().getUuid()!=questionEntity.getUser().getUuid()&&userAuthEntity.getUser().getRole()=="nonadmin"){
+        if((!userAuthEntity.getUser().getUuid().equals(questionEntity.getUser().getUuid()))&&userAuthEntity.getUser().getRole().equals("nonadmin")){
             throw new AuthorizationFailedException("ATHR-003","Only the question owner or admin can delete the question");
         }
 

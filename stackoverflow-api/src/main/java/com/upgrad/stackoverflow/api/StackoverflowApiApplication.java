@@ -13,6 +13,6 @@ import org.springframework.context.annotation.Import;
 @Import(ServiceConfiguration.class)
 public class StackoverflowApiApplication {
     public static void main(String [] args){
-        SpringApplication.run(StackoverflowApiApplication.class);
+        SpringApplication.run(StackoverflowApiApplication.class,args);
     }
 }

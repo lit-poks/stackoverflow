@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Base64;
 import java.util.UUID;
+
+@RestController
 @RequestMapping("/user")
 public class UserController {
 
@@ -64,9 +66,9 @@ public class UserController {
      * @throws AuthenticationFailedException
      */
     @RequestMapping(method = RequestMethod.POST,path = "/user/signin",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<SigninResponse> signin(@RequestHeader("authorisation") String authorization) throws AuthenticationFailedException{
+    public ResponseEntity<SigninResponse> signin(@RequestHeader("authorization") String authorization) throws AuthenticationFailedException{
 
-        byte[] decode=Base64.getDecoder().decode(authorization.split("Basic")[1]);
+        byte[] decode=Base64.getDecoder().decode(authorization.split("Basic ")[1]);
         String decoded=new String(decode);
         String userCredentials[]=decoded.split(":");
         final UserAuthEntity userAuthEntity=userBusinessService.authenticate(userCredentials[0],userCredentials[1]);
@@ -86,10 +88,10 @@ public class UserController {
      * @throws SignOutRestrictedException
      */
     @RequestMapping(method = RequestMethod.POST,path = "/user/signout",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<SignoutResponse> signout(@RequestHeader("authorisation") String authorization) throws SignOutRestrictedException{
-    byte[] decode=Base64.getDecoder().decode(authorization.split("Bearer")[1]);
-    String decodedToken=new String(decode);
-    UserAuthEntity userAuthEntity=userBusinessService.signout(decodedToken);
+    public ResponseEntity<SignoutResponse> signout(@RequestHeader("authorization") String authorization) throws SignOutRestrictedException{
+//    byte[] decode=Base64.getDecoder().decode(authorization.split("Bearer ")[1]);
+//    String decodedToken=new String(decode);
+    UserAuthEntity userAuthEntity=userBusinessService.signout(authorization);
     SignoutResponse signoutResponse=new SignoutResponse().id(userAuthEntity.getUuid()).message("SIGNED OUT SUCCESSFULLY");
 
     return new ResponseEntity<SignoutResponse>(signoutResponse,HttpStatus.OK);
