@@ -20,7 +20,7 @@ import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
-
+@RestController
 @RequestMapping("/")
 public class AnswerController {
 
@@ -40,10 +40,14 @@ public class AnswerController {
      */
     @RequestMapping(method = RequestMethod.POST,path = "/question/{questionId}/answer/create",consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<AnswerResponse> createAnswer(AnswerRequest answerRequest,@PathVariable("questionId")String questionId,@RequestHeader("authorization")String authorization)
-            throws AuthorizationFailedException,InvalidQuestionException{
 
-        byte[] decode= Base64.getDecoder().decode(authorization.split("Bearer")[1]);
-        String decodedAuthorization=new String(decode);
+    throws AuthorizationFailedException,InvalidQuestionException{
+
+//        byte[] decode= Base64.getDecoder().decode(authorization.split("Bearer ")[1]);
+//        String decodedAuthorization=new String(decode);
+
+        
+
 
         AnswerEntity answerEntity=new AnswerEntity();
         answerEntity.setAns(answerRequest.getAnswer());
@@ -53,7 +57,11 @@ public class AnswerController {
             throw new InvalidQuestionException("QUES-001","The question entered is invalid");
         }
         answerEntity.setQuestion(questionEntity);
-        AnswerEntity createdAnswer=answerBusinessService.createAnswer(answerEntity,decodedAuthorization);
+
+        AnswerEntity createdAnswer=answerBusinessService.createAnswer(answerEntity,authorization);
+
+      
+
         AnswerResponse answerResponse=new AnswerResponse().id(createdAnswer.getUuid()).status("ANSWER CREATED");
 
         return  new ResponseEntity<AnswerResponse>(answerResponse,HttpStatus.CREATED);
@@ -71,14 +79,18 @@ public class AnswerController {
      */
     @RequestMapping(method = RequestMethod.PUT,path = "/answer/edit/{answerId}",consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<AnswerEditResponse> editAnswerContent(AnswerEditRequest answerEditRequest,@PathVariable("answerId")String answerId,@RequestHeader("authorization")String authorization)
-            throws AuthorizationFailedException,AnswerNotFoundException{
 
-        byte[] decode= Base64.getDecoder().decode(authorization.split("Bearer")[1]);
-        String decodedAuthorization=new String(decode);
+    throws AuthorizationFailedException,AnswerNotFoundException{
+
+//        byte[] decode= Base64.getDecoder().decode(authorization.split("Bearer ")[1]);
+//        String decodedAuthorization=new String(decode);
 
         AnswerEntity answerEntity=new AnswerEntity();
         answerEntity.setAns(answerEditRequest.getContent());
-        AnswerEntity editedAnswer=answerBusinessService.editAnswerContent(answerEntity,answerId,decodedAuthorization);
+        AnswerEntity editedAnswer=answerBusinessService.editAnswerContent(answerEntity,answerId,authorization);
+
+           
+
         AnswerEditResponse answerEditResponse=new AnswerEditResponse().id(editedAnswer.getUuid()).status("ANSWER EDITED");
         return new ResponseEntity<AnswerEditResponse>(answerEditResponse,HttpStatus.OK);
     }
@@ -94,12 +106,16 @@ public class AnswerController {
      */
     @RequestMapping(method = RequestMethod.DELETE,path = "/answer/delete/{answerId}",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<AnswerDeleteResponse> deleteAnswer(@PathVariable("answerId")String answerId,@RequestHeader("authorization")String authorization)
-            throws AuthorizationFailedException,AnswerNotFoundException{
 
-        byte[] decode= Base64.getDecoder().decode(authorization.split("Bearer")[1]);
-        String decodedAuthorization=new String(decode);
+    throws AuthorizationFailedException,AnswerNotFoundException{
+//
+//        byte[] decode= Base64.getDecoder().decode(authorization.split("Bearer ")[1]);
+//        String decodedAuthorization=new String(decode);
 
-        AnswerEntity answerEntity=answerBusinessService.deleteAnswer(answerId,decodedAuthorization);
+        AnswerEntity answerEntity=answerBusinessService.deleteAnswer(answerId,authorization);
+
+            
+
         AnswerDeleteResponse answerDeleteResponse=new AnswerDeleteResponse().id(answerEntity.getUuid()).status("ANSWER DELETED");
         return new ResponseEntity<AnswerDeleteResponse>(answerDeleteResponse,HttpStatus.OK);
     }
@@ -114,18 +130,25 @@ public class AnswerController {
      */
     @RequestMapping(method = RequestMethod.GET,path = "answer/all/{questionId}",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<List<AnswerDetailsResponse>> getAllAnswersToQuestion(@PathVariable("questionId")String questionId,@RequestHeader("authorization")String authorization)
-            throws AuthorizationFailedException,InvalidQuestionException{
-        byte[] decode= Base64.getDecoder().decode(authorization.split("Bearer")[1]);
-        String decodedAuthorization=new String(decode);
 
-        TypedQuery<AnswerEntity> queriedAnswers=answerBusinessService.getAnswersByQuestion(questionId,decodedAuthorization);
+    throws AuthorizationFailedException,InvalidQuestionException{
+//        byte[] decode= Base64.getDecoder().decode(authorization.split("Bearer ")[1]);
+//        String decodedAuthorization=new String(decode);
+
+        TypedQuery<AnswerEntity> queriedAnswers=answerBusinessService.getAnswersByQuestion(questionId,authorization);
+
+           
+
         List<AnswerEntity> answerList=queriedAnswers.getResultList();
         List<AnswerDetailsResponse> answerDetailsResponses=new ArrayList<AnswerDetailsResponse>();
 
         for(AnswerEntity a:answerList){
             answerDetailsResponses.add(new AnswerDetailsResponse().id(a.getUuid()).questionContent(a.getQuestion().getContent()).answerContent(a.getAns()));
         }
-        return new ResponseEntity<List<AnswerDetailsResponse>>(answerDetailsResponses,HttpStatus.OK);
+
+    return new ResponseEntity<List<AnswerDetailsResponse>>(answerDetailsResponses,HttpStatus.OK);
+
+      
     }
 
 

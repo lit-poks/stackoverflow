@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Base64;
 
+@RestController
 @RequestMapping("/")
 public class CommonController {
 
@@ -30,10 +31,10 @@ public class CommonController {
      */
     @RequestMapping(method = RequestMethod.GET,path = "userprofile/{userId}",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<UserDetailsResponse> getUserDetails(@PathVariable("userId") final String userId,@RequestHeader("authorisation") String authorization) throws  UserNotFoundException,AuthorizationFailedException{
-        byte[] decode= Base64.getDecoder().decode(authorization.split("Bearer")[1]);
-        String decodedAuthorization=new String(decode);
+//        byte[] decode= Base64.getDecoder().decode(authorization.split("Bearer ")[1]);
+//        String decodedAuthorization=new String(decode);
 
-        UserEntity userEntity=commonBusinessService.getUser(userId,decodedAuthorization);
+        UserEntity userEntity=commonBusinessService.getUser(userId,authorization);
         final UserDetailsResponse userDetailsResponse=new UserDetailsResponse();
         userDetailsResponse.setFirstName(userEntity.getFirstName());
         userDetailsResponse.setLastName(userEntity.getLastName());

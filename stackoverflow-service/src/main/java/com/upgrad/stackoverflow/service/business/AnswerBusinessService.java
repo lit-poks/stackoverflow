@@ -77,7 +77,11 @@ public class AnswerBusinessService {
             throw new AnswerNotFoundException("ANS-001","Entered answer uuid does not exist");
         }
 
-        if(userAuthEntity.getUser().getUuid()!=oldAnswer.getUser().getUuid()){
+
+        if(!userAuthEntity.getUser().getUuid().equals(oldAnswer.getUser().getUuid())){
+
+       
+
             throw new AuthorizationFailedException("ATHR-003","Only the answer owner can edit the answer");
         }
 
@@ -105,7 +109,11 @@ public class AnswerBusinessService {
             throw new AnswerNotFoundException("ANS-001","Entered answer uuid does not exist");
         }
 
-        if(userAuthEntity.getUser().getUuid()!=answerEntity.getUser().getUuid()&&userAuthEntity.getUser().getRole()=="nonadmin"){
+
+        if((!userAuthEntity.getUser().getUuid().equals(answerEntity.getUser().getUuid()))&&userAuthEntity.getUser().getRole().equals("nonadmin")){
+
+       
+
             throw new AuthorizationFailedException("ATHR-003","Only the answer owner or admin can delete the answer");
         }
 
@@ -128,7 +136,11 @@ public class AnswerBusinessService {
             throw new AuthorizationFailedException("ATHR-002","User is signed out.Sign in first to delete an answer");
         }
 
-        final QuestionEntity questionEntity=getQuestionByUuid(questionId);
+
+       final QuestionEntity questionEntity=getQuestionByUuid(questionId);
+
+       
+
         if(questionEntity==null){
             throw new InvalidQuestionException("QUES-001","The question with entered uuid whose details are to be seen does not exist");
         }
