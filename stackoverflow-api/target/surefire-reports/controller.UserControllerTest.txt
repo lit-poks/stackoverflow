@@ -1,0 +1,16 @@
+-------------------------------------------------------------------------------
+Test set: controller.UserControllerTest
+-------------------------------------------------------------------------------
+Tests run: 3, Failures: 3, Errors: 0, Skipped: 0, Time elapsed: 0.159 s <<< FAILURE! - in controller.UserControllerTest
+signupWithRepeatedEmail  Time elapsed: 0.062 s  <<< FAILURE!
+java.lang.AssertionError: Status expected:<409> but was:<404>
+	at controller.UserControllerTest.signupWithRepeatedEmail(UserControllerTest.java:40)
+
+signoutWithNonExistingAccessToken  Time elapsed: 0.047 s  <<< FAILURE!
+java.lang.AssertionError: Status expected:<401> but was:<404>
+	at controller.UserControllerTest.signoutWithNonExistingAccessToken(UserControllerTest.java:49)
+
+signupWithRepeatedUserName  Time elapsed: 0.05 s  <<< FAILURE!
+java.lang.AssertionError: Status expected:<409> but was:<404>
+	at controller.UserControllerTest.signupWithRepeatedUserName(UserControllerTest.java:32)
+

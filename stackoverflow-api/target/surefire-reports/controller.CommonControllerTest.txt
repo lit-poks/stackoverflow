@@ -1,0 +1,16 @@
+-------------------------------------------------------------------------------
+Test set: controller.CommonControllerTest
+-------------------------------------------------------------------------------
+Tests run: 3, Failures: 3, Errors: 0, Skipped: 0, Time elapsed: 0.203 s <<< FAILURE! - in controller.CommonControllerTest
+detailsOfNonExistingUser  Time elapsed: 0.078 s  <<< FAILURE!
+java.lang.AssertionError: Status expected:<404> but was:<400>
+	at controller.CommonControllerTest.detailsOfNonExistingUser(CommonControllerTest.java:47)
+
+detailsUsingNonExistingAccessToken  Time elapsed: 0.062 s  <<< FAILURE!
+java.lang.AssertionError: Status expected:<403> but was:<400>
+	at controller.CommonControllerTest.detailsUsingNonExistingAccessToken(CommonControllerTest.java:39)
+
+details  Time elapsed: 0.063 s  <<< FAILURE!
+java.lang.AssertionError: Status expected:<200> but was:<400>
+	at controller.CommonControllerTest.details(CommonControllerTest.java:32)
+

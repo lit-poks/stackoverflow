@@ -32,6 +32,9 @@ public class AdminController {
     @RequestMapping(method = RequestMethod.DELETE,path = "/admin/user/{userId}",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<UserDeleteResponse> userDelete(@PathVariable("userId")String userId, @RequestHeader("authorization")String authorization)
     throws AuthorizationFailedException, UserNotFoundException {
+        //the below commented code is implemented when the authorisation comes in base64encoded form
+        //but for this purpose we assume the authorisation code is sent in the header
+
 //        byte[] decode= Base64.getDecoder().decode(authorization.split("Bearer ")[1]);
 //        String decodedAuthorization=new String(decode);
 

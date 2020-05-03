@@ -34,11 +34,12 @@ public class AnswerBusinessService {
     @Transactional(propagation = Propagation.REQUIRED)
     public AnswerEntity createAnswer(final AnswerEntity answerEntity,final String authorization) throws AuthorizationFailedException {
 
+        //if user has not signed in
         final UserAuthEntity userAuthEntity = userDao.getUserAuthByAccesstoken(authorization);
         if(userAuthEntity==null){
             throw new AuthorizationFailedException("ATHR-001","User has not signed in");
         }
-
+    //if the user has logged out
         if(userAuthEntity.getLogoutAt()!=null){
             throw new AuthorizationFailedException("ATHR-002","User is signed out.Sign in first to post an answer");
         }
@@ -49,7 +50,7 @@ public class AnswerBusinessService {
         return answerEntity;
 
     }
-
+    // this function returns the question for the paticular user by searching it with the uuid in the database
     public QuestionEntity getQuestionByUuid(String Uuid) throws InvalidQuestionException {
 
         QuestionEntity questionEntity = answerDao.getQuestionByUuid(Uuid);
@@ -109,10 +110,8 @@ public class AnswerBusinessService {
             throw new AnswerNotFoundException("ANS-001","Entered answer uuid does not exist");
         }
 
-
+        //if the usertrying to delete the answer is not the owner of the question or is not an admin the exception is thrown
         if((!userAuthEntity.getUser().getUuid().equals(answerEntity.getUser().getUuid()))&&userAuthEntity.getUser().getRole().equals("nonadmin")){
-
-       
 
             throw new AuthorizationFailedException("ATHR-003","Only the answer owner or admin can delete the answer");
         }
@@ -144,6 +143,7 @@ public class AnswerBusinessService {
         if(questionEntity==null){
             throw new InvalidQuestionException("QUES-001","The question with entered uuid whose details are to be seen does not exist");
         }
+        // gets the entire set answers for a paticular question
         final TypedQuery<AnswerEntity> answerEntityTypedQuery=answerDao.getAnswersByQuestion(questionEntity);
         return answerEntityTypedQuery;
 

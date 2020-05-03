@@ -34,10 +34,13 @@ public class UserBusinessService {
         userEntity.setSalt(encryptedText[0]);
         userEntity.setPassword(encryptedText[1]);
         userEntity.setRole("nonadmin");
+
+        //if the user has entered a email id that already exists in the database
         if(userDao.getUserByEmail(userEntity.getEmail())!=null){
             throw new SignUpRestrictedException("SGR-002","This user has already been registered, try with any other emailId");
         }
 
+        //f the user tries to use a username that is already present in the database the exception is thrown
         if(userDao.getUserByUsername(userEntity.getUserName())!=null){
             throw new SignUpRestrictedException("SGR-001","Try any other Username, this Username has already been taken");
         }
@@ -47,6 +50,7 @@ public class UserBusinessService {
 
     /**
      * The method implements the business logic for signin endpoint.
+     * it authenticates if the username or password corresponds to the paticular user
      */
     @Transactional(propagation = Propagation.REQUIRED)
     public UserAuthEntity authenticate(final String username,final String password) throws AuthenticationFailedException {
@@ -91,7 +95,7 @@ public class UserBusinessService {
         }
 
         userAuthEntity.setLogoutAt(ZonedDateTime.now());
-
+        //logs out the user 
         final UserAuthEntity updatedUserAuth=userDao.updateUserAuth(userAuthEntity);
         return updatedUserAuth;
     }

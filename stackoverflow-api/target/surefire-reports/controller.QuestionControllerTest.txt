@@ -1,0 +1,74 @@
+-------------------------------------------------------------------------------
+Test set: controller.QuestionControllerTest
+-------------------------------------------------------------------------------
+Tests run: 16, Failures: 16, Errors: 0, Skipped: 0, Time elapsed: 0.861 s <<< FAILURE! - in controller.QuestionControllerTest
+getAllQuestionsWithSignedOutUser  Time elapsed: 0.063 s  <<< FAILURE!
+java.lang.AssertionError: Status expected:<403> but was:<404>
+	at controller.QuestionControllerTest.getAllQuestionsWithSignedOutUser(QuestionControllerTest.java:66)
+
+deleteQuestionWithSignedOutUser  Time elapsed: 0.046 s  <<< FAILURE!
+java.lang.AssertionError: Status expected:<403> but was:<404>
+	at controller.QuestionControllerTest.deleteQuestionWithSignedOutUser(QuestionControllerTest.java:114)
+
+deleteQuestionWithoutOwnership  Time elapsed: 0.047 s  <<< FAILURE!
+java.lang.AssertionError: Status expected:<403> but was:<404>
+	at controller.QuestionControllerTest.deleteQuestionWithoutOwnership(QuestionControllerTest.java:122)
+
+createQuestionWithSignedOutUser  Time elapsed: 0.047 s  <<< FAILURE!
+java.lang.AssertionError: Status expected:<403> but was:<404>
+	at controller.QuestionControllerTest.createQuestionWithSignedOutUser(QuestionControllerTest.java:43)
+
+getAllQuestionsByUserWithNonExistingAccessToken  Time elapsed: 0.063 s  <<< FAILURE!
+java.lang.AssertionError: Status expected:<403> but was:<404>
+	at controller.QuestionControllerTest.getAllQuestionsByUserWithNonExistingAccessToken(QuestionControllerTest.java:139)
+
+getAllQuestionsForNonExistingUser  Time elapsed: 0.047 s  <<< FAILURE!
+java.lang.AssertionError: No value at JSON path "code"
+	at controller.QuestionControllerTest.getAllQuestionsForNonExistingUser(QuestionControllerTest.java:156)
+Caused by: java.lang.IllegalArgumentException: json can not be null or empty
+	at controller.QuestionControllerTest.getAllQuestionsForNonExistingUser(QuestionControllerTest.java:156)
+
+createQuestionWithNonExistingAccessToken  Time elapsed: 0.047 s  <<< FAILURE!
+java.lang.AssertionError: Status expected:<403> but was:<404>
+	at controller.QuestionControllerTest.createQuestionWithNonExistingAccessToken(QuestionControllerTest.java:35)
+
+editQuestionWithWithSignedOutUser  Time elapsed: 0.047 s  <<< FAILURE!
+java.lang.AssertionError: Status expected:<403> but was:<404>
+	at controller.QuestionControllerTest.editQuestionWithWithSignedOutUser(QuestionControllerTest.java:82)
+
+editQuestionWithNonExistingAccessToken  Time elapsed: 0.047 s  <<< FAILURE!
+java.lang.AssertionError: Status expected:<403> but was:<404>
+	at controller.QuestionControllerTest.editQuestionWithNonExistingAccessToken(QuestionControllerTest.java:74)
+
+deleteQuestionWithNonExistingAccessToken  Time elapsed: 0.047 s  <<< FAILURE!
+java.lang.AssertionError: Status expected:<403> but was:<404>
+	at controller.QuestionControllerTest.deleteQuestionWithNonExistingAccessToken(QuestionControllerTest.java:106)
+
+editQuestionWithoutOwnership  Time elapsed: 0.063 s  <<< FAILURE!
+java.lang.AssertionError: Status expected:<403> but was:<404>
+	at controller.QuestionControllerTest.editQuestionWithoutOwnership(QuestionControllerTest.java:90)
+
+deleteNoneExistingQuestion  Time elapsed: 0.047 s  <<< FAILURE!
+java.lang.AssertionError: No value at JSON path "code"
+	at controller.QuestionControllerTest.deleteNoneExistingQuestion(QuestionControllerTest.java:132)
+Caused by: java.lang.IllegalArgumentException: json can not be null or empty
+	at controller.QuestionControllerTest.deleteNoneExistingQuestion(QuestionControllerTest.java:132)
+
+getAllQuestionsByUserWithSignedOutUser  Time elapsed: 0.063 s  <<< FAILURE!
+java.lang.AssertionError: Status expected:<403> but was:<404>
+	at controller.QuestionControllerTest.getAllQuestionsByUserWithSignedOutUser(QuestionControllerTest.java:147)
+
+editNonExistingQuestion  Time elapsed: 0.047 s  <<< FAILURE!
+java.lang.AssertionError: No value at JSON path "code"
+	at controller.QuestionControllerTest.editNonExistingQuestion(QuestionControllerTest.java:99)
+Caused by: java.lang.IllegalArgumentException: json can not be null or empty
+	at controller.QuestionControllerTest.editNonExistingQuestion(QuestionControllerTest.java:99)
+
+getAllQuestions  Time elapsed: 0.047 s  <<< FAILURE!
+java.lang.AssertionError: Status expected:<200> but was:<404>
+	at controller.QuestionControllerTest.getAllQuestions(QuestionControllerTest.java:51)
+
+getAllQuestionsWithNonExistingAccessToken  Time elapsed: 0.077 s  <<< FAILURE!
+java.lang.AssertionError: Status expected:<403> but was:<404>
+	at controller.QuestionControllerTest.getAllQuestionsWithNonExistingAccessToken(QuestionControllerTest.java:58)
+

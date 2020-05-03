@@ -104,6 +104,9 @@ public class QuestionController {
     @RequestMapping(method = RequestMethod.DELETE,path = "/question/delete/{questionId}",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<QuestionDeleteResponse> deleteQuestion(@RequestHeader("authorization") String authorization,@PathVariable("questionId")String questionId)
     throws AuthorizationFailedException,InvalidQuestionException{
+        //the below commented code is implemented when the authorisation comes in base64encoded form
+        //but for this purpose we assume the authorisation code is sent in the header
+
 //        byte[] decode= Base64.getDecoder().decode(authorization.split("Bearer ")[1]);
 //        final String decodedAuthorization=new String(decode);
         QuestionEntity deletedQuestionEntity=questionBusinessService.deleteQuestion(questionId,authorization);

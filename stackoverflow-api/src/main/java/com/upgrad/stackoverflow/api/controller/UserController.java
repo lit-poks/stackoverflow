@@ -89,6 +89,9 @@ public class UserController {
      */
     @RequestMapping(method = RequestMethod.POST,path = "/user/signout",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<SignoutResponse> signout(@RequestHeader("authorization") String authorization) throws SignOutRestrictedException{
+        //the below commented code is implemented when the authorisation comes in base64encoded form
+        //but for this purpose we assume the authorisation code is sent in the header
+
 //    byte[] decode=Base64.getDecoder().decode(authorization.split("Bearer ")[1]);
 //    String decodedToken=new String(decode);
     UserAuthEntity userAuthEntity=userBusinessService.signout(authorization);

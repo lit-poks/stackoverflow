@@ -1,0 +1,18 @@
+-------------------------------------------------------------------------------
+Test set: controller.AdminControllerTest
+-------------------------------------------------------------------------------
+Tests run: 3, Failures: 3, Errors: 0, Skipped: 0, Time elapsed: 7.415 s <<< FAILURE! - in controller.AdminControllerTest
+deleteWithnonadminAsRole  Time elapsed: 0.346 s  <<< FAILURE!
+java.lang.AssertionError: Status expected:<403> but was:<404>
+	at controller.AdminControllerTest.deleteWithnonadminAsRole(AdminControllerTest.java:42)
+
+deleteWithNonExistingAccessToken  Time elapsed: 0.114 s  <<< FAILURE!
+java.lang.AssertionError: Status expected:<403> but was:<404>
+	at controller.AdminControllerTest.deleteWithNonExistingAccessToken(AdminControllerTest.java:34)
+
+deleteNonExistingUser  Time elapsed: 0.076 s  <<< FAILURE!
+java.lang.AssertionError: No value at JSON path "code"
+	at controller.AdminControllerTest.deleteNonExistingUser(AdminControllerTest.java:52)
+Caused by: java.lang.IllegalArgumentException: json can not be null or empty
+	at controller.AdminControllerTest.deleteNonExistingUser(AdminControllerTest.java:52)
+

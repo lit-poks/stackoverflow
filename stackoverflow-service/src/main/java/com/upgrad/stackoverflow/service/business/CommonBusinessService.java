@@ -22,6 +22,7 @@ public class CommonBusinessService {
     /**
      * The method implements the business logic for userProfile endpoint.
      */
+    //this function retrieves the user by uuid
     public UserEntity getUser(String uuid, String authorization) throws UserNotFoundException, AuthorizationFailedException {
 
         final UserAuthEntity userAuthEntity = userDao.getUserAuthByAccesstoken(authorization);
@@ -34,6 +35,7 @@ public class CommonBusinessService {
         }
 
         final UserEntity userEntity = commonDao.getUserByUuid(uuid);
+        // if the user with the paticular uuid does not exits in the database the exception is thrown
         if(userEntity==null){
             throw new UserNotFoundException("USR-001","User with entered uuid does not exist");
         }

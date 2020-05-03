@@ -141,6 +141,7 @@ public class QuestionBusinessService {
             throw new UserNotFoundException("USR-001","User with entered uuid whose question details are to be seen does not exist");
         }
 
+        //returns the entire set of questions that the user has posted
         TypedQuery<QuestionEntity> quesetionSet=questionDao.getQuestionsByUser(userEntity);
         return quesetionSet;
 
